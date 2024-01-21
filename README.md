@@ -1,1 +1,1 @@
-# term-paper-1
+# sta302-term-paper-1

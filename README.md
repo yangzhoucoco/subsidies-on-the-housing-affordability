@@ -1,1 +1,1 @@
-# sta302-term-paper-1
+# Telling-stories-with-data

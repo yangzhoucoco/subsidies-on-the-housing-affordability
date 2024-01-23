@@ -1,0 +1,24 @@
+---
+title: "Cost of living in Toronto for low-income households"
+author: 
+  - Yang Zhou
+thanks: "Code and data are available at: https://github.com/yangzhoucoco/term-paper-1"
+date: today
+date-format: long
+abstract: "With recent inflation, low-income households are struggling to live in toronto. The data includes different scenarios and compare three situations, with subsidies, without subsidies + average rent, and without subsidies + market rent. We will investigate which factor is the major problem to create negative cashflow, and how to improve to obatin a postive cashflow for them. "
+format: pdf
+number-sections: true
+bibliography: references.bib
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(palmerpenguins)
+```
+
+
+# Introduction

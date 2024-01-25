@@ -120,7 +120,7 @@ The figure presents a clear indication that the blue bars are much higher than t
 
 Therefore, subsidies are crucial for low-income households, as they can help reduce rent and greatly improve and distress their financial situation.
 
-# Appendix
+# Appendix {-}
 
 The differences between average rent and market rent is also significant. We can have a look here.
 

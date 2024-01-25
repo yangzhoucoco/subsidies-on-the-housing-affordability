@@ -8,6 +8,7 @@
 
 #### Workspace setup ####
 library(tidyverse)
+set.seed(1)
 
 
 #### Simulate data ####

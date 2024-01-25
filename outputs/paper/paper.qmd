@@ -1,11 +1,11 @@
 ---
-title: "Cost of living in Toronto for low-income households"
+title: "The effect of financial aid on housing affordability in Canada"
 author: 
   - Yang Zhou
 thanks: "Code and data are available at: https://github.com/yangzhoucoco/term-paper-1"
 date: today
 date-format: long
-abstract: "With recent inflation, low-income households are struggling to live in toronto. The data includes different scenarios and compare three situations, with subsidies, without subsidies + average rent, and without subsidies + market rent. We will investigate which factor is the major problem to create negative cashflow, and how to improve to obatin a postive cashflow for them. "
+abstract: "With recent inflation, low-income households are struggling to pay the rent toronto. The data includes various households and compare three situations. We found that financial aid, or subsidies, is essential for low-income households to achieve postive cashflow for them."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -17,8 +17,134 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
-library(palmerpenguins)
+library(knitr)
 ```
 
-
 # Introduction
+During the pandemic, in an effort to stimulate the economy, the government significantly lowered the interest rates and give many benefits to the society. However it causes the current inflation. 
+
+High interest rates have increased the loan pressure on landlords, which in turn affects their tenants. 
+
+This paper briefly examines the impact of rent on low-income groups and whether financial aid can release their pressure.
+
+The rest of the paper will have a Data section, comparing three situations and what it tells us. Then an appendix section and a reference section.
+
+# Data
+
+The data are obtained from open data toronto [@opentoronto], with title as "cost of living in Toronto for low-income households". There are a total of 9 different households, and 3 situations: with subsidies, without subsidies and market rent, without subsidies and average rent. 
+
+The data includes lots of breakdown of their income, like employment income, Canada Child Benefit, GST/HST credit, Ontario Trillium Benefit, etc. However in our interest, we only care about the total income. As for expenses, these include rent, food, childcare, and transportation. We will keep only the "rent" here. More details can be found in the "README" file accompanying the raw data.
+
+Here we will have a visualization of the data. The code is written in R [@citeR], and the main packge used is tidy verse [@tidy].
+
+```{r width = 20}
+#| fig-cap: "Histogram for 'without subsidies, market rent'"
+#| echo: false
+#| label: fig-a
+
+data <- read_csv( 
+  file = "../data/without subsidies, market rent.csv", 
+  show_col_types = FALSE
+)
+
+data %>%
+  pivot_longer(-group, names_to = "variable", values_to = "percent") %>%
+  ggplot(aes(x = group, y = percent, fill = variable), xlab="Age Group") +
+  geom_bar(stat = "identity", position = "dodge", width = 0.8)
+```
+We can see that in @fig-a the red bars are almost as tall as the blue bars. This indicates that after paying rent, households are left with no remaining funds and subsequently go into debt. We can perform a percentage calculation to confirm this observation. The package we're using to generate tables is knitR [@knitr].
+
+```{r}
+#| tbl-cap: "Ratio of rent to income, in percentage (market)"
+#| echo: false
+#| label: tbl-per
+data %>% 
+  mutate(proportion = rent_per_month/total_income_per_month) %>%
+  mutate(percentage = paste(round(proportion*100, 2), "%")) %>%
+  # remove wo columns, group and proportion
+  select(-3, -4) %>%
+  kable()
+```
+In @tbl-per, we see lots of the percentage are above 100%, that mean their income is lower than the rental cost. We can have another look if we change the rent costs from market price to average price.
+
+
+```{r width = 20}
+#| tbl-cap: "Ratio of rent to income, in percentage (average)"
+#| echo: false
+#| label: tbl-b
+
+data <- read_csv( 
+  file = "../data/without subsidies, average rent.csv", 
+  show_col_types = FALSE
+)
+data %>% 
+  mutate(proportion = rent_per_month/total_income_per_month) %>%
+  mutate(percentage = paste(round(proportion*100, 2), "%")) %>%
+  # remove wo columns, group and proportion
+  select(-3, -4) %>%
+  kable()
+```
+
+In @tbl-b, there are not many percentages over 100%. However, generally, we want rent to be less than 30% of total income to allocate a budget for food, transportation, savings, or even some investing. Out of the nine households listed here, only one has rent costs lower than 30%. Now, let's check if they receive subsidies.
+
+```{r}
+#| tbl-cap: "Ratio of rent to income, in percentage (subsidies)"
+#| echo: false
+#| label: tbl-after
+
+data <- read_csv( 
+  file = "../data/with subsidies.csv", 
+  show_col_types = FALSE
+)
+
+data %>% 
+  mutate(proportion = rent_per_month/total_income_per_month) %>%
+  mutate(percentage = paste(round(proportion*100, 2), "%")) %>%
+  # remove wo columns, group and proportion
+  select(-3, -4) %>%
+  kable()
+```
+
+We observe that in @tbl-after there are no longer any percentages over 100%, which is a very positive sign. Moreover, all of them are now below 30%. Their financial situation has greatly improved with the help of subsidies. This is a significant aid for low-income households. We can revisit the histogram to analyze this situation further.
+
+```{r width = 20}
+#| fig-cap: Histogram of rent and income, with subsidies
+#| echo: false
+
+data %>%
+  pivot_longer(-group, names_to = "variable", values_to = "percent") %>%
+  ggplot(aes(x = group, y = percent, fill = variable), xlab="Age Group") +
+  geom_bar(stat = "identity", position = "dodge", width = 0.8)
+```
+The figure presents a clear indication that the blue bars are much higher than the orange bars, demonstrating that their income is significantly higher than their rental expenses.
+
+Therefore, subsidies are crucial for low-income households, as they can help reduce rent and greatly improve and distress their financial situation.
+
+# Appendix
+
+The differences between average rent and market rent is also significant. We can have a look here.
+
+```{r}
+#| echo: false
+#| tbl-cap: ratio of market to average
+avg <- read_csv( 
+  file = "../data/without subsidies, average rent.csv", 
+  show_col_types = FALSE
+)
+market <- read_csv( 
+  file = "../data/without subsidies, market rent.csv", 
+  show_col_types = FALSE
+)
+
+tibble(
+  average = avg$rent_per_month,
+  market = market$rent_per_month
+) %>% mutate(diff = market/average) %>% kable()
+
+```
+
+We can observe that the minimum increase is around 40%, whereas the maximum is almost double the average rent. This indicates that market rates are very high, likely due to inflation, making it a struggle for low-income households to afford housing.
+
+
+# References
+

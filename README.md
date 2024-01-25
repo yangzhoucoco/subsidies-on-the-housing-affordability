@@ -1,10 +1,18 @@
-# The impact of subsidies on housing affordability in Canada
+# The effect of financial aid on housing affordability in Canada
+
 ## Overview
-This paper examines the impact subsidies on the housing affordability in Canada focusing on   low income earners.  Basically, the paper utilizes data  on several categories of households obtained  for the year 2022,  comparing  household expenditure with the total income earning. A special emphasis is given on expenditure on housing with and without subsidies, exploring  both expenditure figures and  the expenditure expense as a proportion of income.  Then again, affordability of healthy food is  examined, based on the  fact that low incomes substitute healthy food with quality housing ,  when their income level cant support both. 
+This paper studies the effect of subsidies on the housing affordability in Canada. The study analyzes data from various household scenarios for 2022, comparing their average monthly rent to total income in three distinct situations: without subsidies paying average rent, without subsidies paying market rent, and with subsidies.
+
 ## File structure 
 The repository is structured as follows:
-* input/data contains the data used in the analysis of the data together with the downloaded raw data
-* outputs/data contains the cleaned data, ready for analysis 
-* outputs/paper contains the files used to generate the paper including the final paper (pdf file), references (bibtex file), and QMD paper file which includes the scripts used to generate the paper
+1. inputs/data/: contains raw data used for this analysis, downloaded from opentoronto
+2. outputs
+    - paper/: contains the source file .qmd and references, and a gnerated .pdf file
+    - data/: contains the cleaned version of raw data, ready for analysis
+3. scripts/: contains 4 different R scripts, simulating data, download/save data, cleaning the data and simple checking
+4. README.md
+5. starter_folder.Rpoj
+
+
 ## LLM Usage 
-Grammarly was used to proofread the paper. 
+No LLM/AI tool was used in this work.

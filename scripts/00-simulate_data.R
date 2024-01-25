@@ -13,9 +13,12 @@ library(tidyverse)
 #### Simulate data ####
 n_rows <- 10
 
-# Create a tibble
-income <- runif(n = n_rows, min = 1000, max = 3000)
+# random uniform (1000,3000)
+income <- runif(n = n_rows, min = 1000, max = 3000) 
+
+# random uniform(0.3,1.3) acts like a proportion of the income
 rent <- income * runif(n = n_rows, min = 0.3, max = 1.3)
+
 my_tibble <- tibble(income_per_month = income, rent_per_month = rent)
 my_tibble
 

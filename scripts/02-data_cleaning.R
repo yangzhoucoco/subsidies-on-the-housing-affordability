@@ -1,44 +1,38 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: For cleaning data downloaded from opentoronto, and ready for analysis
+# Author: Yang Zhou
+# Date: 24 Jan 2024 
+# Contact: cocoyang.zhou@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
 
 #### Workspace setup ####
 library(tidyverse)
 
-#### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+#### Read data ####
 
-cleaned_data <-
-  raw_data |>
-  janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
-  mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
-  ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
-  mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
-  ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
-  tidyr::drop_na()
+raw_data1 <- read_csv("inputs/data/ 2022 Income Scenario - With Subsidies .csv")
+raw_data2 <- read_csv("inputs/data/ 2022 Income Scenario - Without Subsidies, Average Rent .csv")
+raw_data3 <- read_csv("inputs/data/ 2022 Income Scenario - Without Subsidies, Market Rent .csv")
 
-#### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+
+#### Clean function ####
+
+clean <- function(data){
+  cleaned_data <-
+    data |>
+    slice(13:14) |> # only keep total income and rent
+    select(-1, -2, -3) |>  # no need for the first three columns
+    t() |> # transpose, feature should be in the column
+    as_tibble() |>
+    mutate(V1 = as.numeric(str_replace_all(V1, "[$,]", "")), # remove dollar and comma
+           V2 = as.numeric(str_replace_all(V2, "[$,]", "")),
+           group = paste(row_number())) |>
+    rename(total_income_per_month=V1, rent_per_month=V2)
+  return(cleaned_data)
+}
+
+
+# #### Save data ####
+write_csv(clean(raw_data1), "outputs/data/with subsidies.csv")
+write_csv(clean(raw_data2), "outputs/data/without subsidies, average rent.csv")
+write_csv(clean(raw_data3), "outputs/data/without subsidies, market rent.csv")

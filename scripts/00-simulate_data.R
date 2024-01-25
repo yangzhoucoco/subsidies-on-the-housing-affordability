@@ -1,28 +1,23 @@
 #### Preamble ####
-# Purpose: Simulates... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: To simulate monthly rent and income per month
+# Author: Yang Zhou
+# Date: 24 Jan 2024 
+# Contact: cocoyang.zhou@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
 
 
 #### Workspace setup ####
 library(tidyverse)
-# [...UPDATE THIS...]
+
 
 #### Simulate data ####
-# [...ADD CODE HERE...]
+n_rows <- 10
 
-# Employment income (with cpp/ei deducted)
-# other income (benefits, allowance, credits)
-# Total Income
+# Create a tibble
+income <- runif(n = n_rows, min = 1000, max = 3000)
+rent <- income * runif(n = n_rows, min = 0.3, max = 1.3)
+my_tibble <- tibble(income_per_month = income, rent_per_month = rent)
+my_tibble
 
-# Average Monthly Rent
-# Food
-# Childcare
-# Transportation
-# Total Expense
 
 
